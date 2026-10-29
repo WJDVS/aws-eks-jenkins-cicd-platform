@@ -1,0 +1,16 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+# Secrets & Keys
+.env
+*.pem
+*.key
+id_rsa*
+
+# OS specific
+.DS_Store
+Thumbs.db
