@@ -13,6 +13,7 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - [x] Day 2: Linux & AWS foundations (IAM, AWS CLI, CloudWatch billing alarms, SSH keys).
 - [x] Day 3: AWS networking & compute built by hand in the console.
 - [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
+- [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
 
 ## 🏗️ Project Progress & Implementation Phases
 
@@ -30,3 +31,18 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - **Multi-Hop Access Validation:** Established a secure two-hop access pattern from local WSL2 terminal through the public jump host (`10.0.11.236`) into the private instance using SSH agent forwarding (`-A`).
 - **Egress Verification:** Validated outbound connectivity from the private instance, achieving 0% packet loss on ICMP pings to `8.8.8.8` and a successful `HTTP/2 200` response from `aws.amazon.com` via the NAT Gateway.
 - **Visual Artifacts:** Terminal output and egress validation captured at `docs/screenshots/04-private-instance-ping.png`.
+
+### ✅ Day 5: Manual EKS Infrastructure & Cluster Setup
+- **Core Provisioning:** Completed the manual provisioning of core AWS EKS infrastructure via the AWS CLI to establish foundational networking and control plane security.
+- **Provisioned Resources:**
+  - **VPC:** `ekscicd-vpc` (`10.0.0.0/16`) with public and private subnets across two Availability Zones.
+  - **IAM Roles:** 
+    - `ekscicd-eks-cluster-role` with `AmazonEKSClusterPolicy`.
+    - `ekscicd-eks-nodegroup-role` with worker node policies.
+  - **Security Group:** `ekscicd-eks-cluster-sg` (`sg-061c2e4640ef8bdd6`).
+  - **EKS Control Plane:** `ekscicd-eks-cluster` (Kubernetes v1.37, Active).
+- **Visual Artifacts:** 
+  - `assets/screenshots/ekscicd-day5-vpc-describe.png` — VPC Resource Map architecture view.
+  - `assets/screenshots/ekscicd-day5-iam-role.png` — IAM Role permissions and policy attachments.
+  - `assets/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
+  - `assets/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
