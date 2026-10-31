@@ -16,3 +16,4 @@ id_rsa*
 Thumbs.db
 aws/
 awscliv2.zip
+kubectl
