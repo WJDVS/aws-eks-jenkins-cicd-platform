@@ -18,6 +18,14 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 
 ---
 
+## 📐 Architecture Overview
+
+The following diagram outlines the system architecture for the EKS CI/CD pipeline, detailing resources provisioned via Terraform (Day 6) and planned components for subsequent days:
+
+![Architecture Diagram](docs/screenshots/ekscicd-architecture.png)
+
+---
+
 ## 🏗️ Project Progress & Implementation Phases
 
 ### ✅ Day 3: Custom VPC & Core Networking Foundations
