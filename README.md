@@ -14,7 +14,7 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - [x] Day 3: AWS networking & compute built by hand in the console.
 - [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
 - [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
-- [x] Day 6: Terraform directory initialization, S3 state bucket setup, and remote backend configuration with native locking.
+- [x] Day 6: Terraform directory initialization, remote S3 backend setup, and network foundation (`vpc.tf`) codification.
 
 ---
 
@@ -50,8 +50,10 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
   - `docs/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
   - `docs/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
 
-### ✅ Day 6: Terraform Initialization & Remote Backend Setup
-- **Infrastructure as Code:** Initialized the `terraform/` directory structure under version control.
-- **State Management:** Created the S3 state bucket (`ekscicd-terraform-state-bucket`) and configured the remote backend utilizing native state locking (`use_lockfile = true`) in `us-east-1`.
-- **Provider Configuration:** Pinned the HashiCorp AWS provider version `~> 5.0`.
-- **Visual Artifacts:** `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
+### ✅ Day 6: Terraform Infrastructure as Code & Network Codification
+- **State Management & Initialization:** Initialized the `terraform/` directory, created the S3 state bucket (`ekscicd-terraform-state-bucket`), configured the remote backend utilizing native state locking (`use_lockfile = true`) in `us-east-1`, and pinned the HashiCorp AWS provider version `~> 5.0`.
+- **Network Foundation (`vpc.tf`):** Codified `ekscicd-vpc` (`10.0.0.0/16`), an Internet Gateway, and multi-AZ public/private subnets equipped with standard Kubernetes cluster resource tagging.
+- **Validation:** Executed `terraform plan` confirming 6 infrastructure resources ready for clean-slate provisioning.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
+  - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
