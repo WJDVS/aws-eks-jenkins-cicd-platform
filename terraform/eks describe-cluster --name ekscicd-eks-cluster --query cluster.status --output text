@@ -1,0 +1,43 @@
+{
+    "nodegroup": {
+        "nodegroupName": "ekscicd-nodegroup",
+        "nodegroupArn": "arn:aws:eks:us-east-1:891612560987:nodegroup/ekscicd-eks-cluster/ekscicd-nodegroup/8ed0c9df-db16-ea04-c841-2af5dde3a3a8",
+        "clusterName": "ekscicd-eks-cluster",
+        "version": "1.37",
+        "releaseVersion": "1.37.1-20261031",
+        "createdAt": "2026-10-31T16:56:18.052000-04:00",
+        "modifiedAt": "2026-10-31T21:57:49.572000-04:00",
+        "status": "DELETING",
+        "capacityType": "ON_DEMAND",
+        "scalingConfig": {
+            "minSize": 1,
+            "maxSize": 3,
+            "desiredSize": 2
+        },
+        "instanceTypes": [
+            "t3.medium"
+        ],
+        "subnets": [
+            "subnet-0a7da4b1642226e9d",
+            "subnet-04317480b18a8e353"
+        ],
+        "amiType": "AL2023_x86_64_STANDARD",
+        "nodeRole": "arn:aws:iam::891612560987:role/ekscicd-eks-nodegroup-role",
+        "labels": {},
+        "resources": {
+            "autoScalingGroups": [
+                {
+                    "name": "eks-ekscicd-nodegroup-8ed0c9df-db16-ea04-c841-2af5dde3a3a8"
+                }
+            ]
+        },
+        "diskSize": 20,
+        "health": {
+            "issues": []
+        },
+        "updateConfig": {
+            "maxUnavailable": 1
+        },
+        "tags": {}
+    }
+}

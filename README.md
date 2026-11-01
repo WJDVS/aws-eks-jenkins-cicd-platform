@@ -14,7 +14,7 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - [x] Day 3: AWS networking & compute built by hand in the console.
 - [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
 - [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
-- [x] Day 6: Terraform directory initialization, remote S3 backend setup, network foundation, IAM/security groups, and EKS cluster codification.
+- [x] Day 6: Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, and automated EKS cluster deployment.
 
 ---
 
@@ -50,15 +50,17 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
   - `docs/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
   - `docs/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
 
-### ✅ Day 6: Terraform Infrastructure as Code, Network Foundation, IAM, Security Groups & EKS Cluster
-- **State Management & Initialization:** Initialized the `terraform/` directory, created the S3 state bucket (`ekscicd-terraform-state-bucket`), configured the remote backend utilizing native state locking (`use_lockfile = true`) in `us-east-1`, and pinned the HashiCorp AWS provider version `~> 5.0`.
-- **Network Foundation (`vpc.tf` & `routes.tf`):** Codified `ekscicd-vpc` (`10.0.0.0/16`), an Internet Gateway, multi-AZ public/private subnets with explicit Kubernetes cluster resource tagging, an Elastic IP (`ekscicd-nat-eip`), a NAT Gateway (`ekscicd-nat-gw`), custom route tables, and explicit subnet routing associations.
-- **IAM & Security Groups (`iam.tf` & `security-groups.tf`):** Codified `ekscicd-eks-cluster-role` and `ekscicd-eks-nodegroup-role` with requisite AWS managed policies, and established `ekscicd-eks-cluster-sg` for the EKS control plane.
-- **EKS Control Plane & Worker Nodes (`eks.tf`):** Codified the EKS control plane (`ekscicd-eks-cluster` v1.37) spanning public/private subnets and a managed worker node group (`ekscicd-eks-nodegroup`) running `t3.medium` instances across private subnets.
-- **Validation:** Executed `terraform plan` confirming 23 total infrastructure resources ready for clean-slate provisioning.
-- **Visual Artifacts:** 
-  - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
-  - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
-  - `docs/screenshots/ekscicd-day6-terraform-plan-routes.png` — Terminal output verifying the complete network routes plan.
-  - `docs/screenshots/ekscicd-day6-terraform-plan-iam-sg.png` — Terminal output verifying the IAM and security group plan.
-  - `docs/screenshots/ekscicd-day6-terraform-plan-eks.png` — Terminal output verifying the complete EKS infrastructure plan.
+---
+
+### Phase 2: Infrastructure as Code, CI/CD & Orchestration
+
+- [x] **Day 6: Terraform (Infrastructure as Code)**
+  - **Status:** Completed
+  - **Deliverable:** Codified network foundation, IAM roles, security groups, and EKS v1.37 architecture into Terraform modules. Established remote state storage backed by S3 with native state locking (`use_lockfile = true`). Cleared legacy "Day 5" manual infrastructure conflicts via AWS CLI teardown and achieved a clean-slate deployment (`Apply complete! Resources: 2 added, 0 changed, 0 destroyed.`).
+  - **Visual Artifacts:** 
+    - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
+    - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
+    - `docs/screenshots/ekscicd-day6-terraform-plan-routes.png` — Terminal output verifying the complete network routes plan.
+    - `docs/screenshots/ekscicd-day6-terraform-plan-iam-sg.png` — Terminal output verifying the IAM and security group plan.
+    - `docs/screenshots/ekscicd-day6-terraform-plan-eks.png` — Terminal output verifying the complete EKS infrastructure plan.
+    - `docs/screenshots/ekscicd-day6-terraform-apply-success.png` — Terminal output verifying the successful clean-slate deployment.
