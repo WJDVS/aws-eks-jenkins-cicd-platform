@@ -14,7 +14,7 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - [x] Day 3: AWS networking & compute built by hand in the console.
 - [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
 - [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
-- [x] Day 6: Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, and automated EKS cluster deployment.
+- [x] Day 6: Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, automated EKS cluster deployment, and GitHub synchronization.
 
 ---
 
@@ -56,7 +56,7 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 
 - [x] **Day 6: Terraform (Infrastructure as Code)**
   - **Status:** Completed
-  - **Deliverable:** Codified network foundation, IAM roles, security groups, and EKS v1.37 architecture into Terraform modules. Established remote state storage backed by S3 with native state locking (`use_lockfile = true`). Cleared legacy "Day 5" manual infrastructure conflicts via AWS CLI teardown and achieved a clean-slate deployment (`Apply complete! Resources: 2 added, 0 changed, 0 destroyed.`).
+  - **Deliverable:** Codified network foundation, IAM roles, security groups, and EKS v1.37 architecture into Terraform modules. Established remote state storage backed by S3 with native state locking (`use_lockfile = true`). Cleared legacy "Day 5" manual infrastructure conflicts via AWS CLI teardown and achieved a clean-slate deployment (`Apply complete! Resources: 2 added, 0 changed, 0 destroyed.`). Synchronized all codebase and artifact updates to GitHub.
   - **Visual Artifacts:** 
     - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
     - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
@@ -64,3 +64,4 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
     - `docs/screenshots/ekscicd-day6-terraform-plan-iam-sg.png` — Terminal output verifying the IAM and security group plan.
     - `docs/screenshots/ekscicd-day6-terraform-plan-eks.png` — Terminal output verifying the complete EKS infrastructure plan.
     - `docs/screenshots/ekscicd-day6-terraform-apply-success.png` — Terminal output verifying the successful clean-slate deployment.
+    - `docs/screenshots/ekscicd-day6-git-push.png` — Terminal output verifying successful git commit and push to remote GitHub repository.
