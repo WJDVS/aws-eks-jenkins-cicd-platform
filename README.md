@@ -14,6 +14,9 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - [x] Day 3: AWS networking & compute built by hand in the console.
 - [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
 - [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
+- [x] Day 6: Terraform directory initialization, S3 state bucket setup, and remote backend configuration with native locking.
+
+---
 
 ## 🏗️ Project Progress & Implementation Phases
 
@@ -42,7 +45,13 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
   - **Security Group:** `ekscicd-eks-cluster-sg` (`sg-061c2e4640ef8bdd6`).
   - **EKS Control Plane:** `ekscicd-eks-cluster` (Kubernetes v1.37, Active).
 - **Visual Artifacts:** 
-  - `assets/screenshots/ekscicd-day5-vpc-describe.png` — VPC Resource Map architecture view.
-  - `assets/screenshots/ekscicd-day5-iam-role.png` — IAM Role permissions and policy attachments.
-  - `assets/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
-  - `assets/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
+  - `docs/screenshots/ekscicd-day5-vpc-describe.png` — VPC Resource Map architecture view.
+  - `docs/screenshots/ekscicd-day5-iam-role.png` — IAM Role permissions and policy attachments.
+  - `docs/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
+  - `docs/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
+
+### ✅ Day 6: Terraform Initialization & Remote Backend Setup
+- **Infrastructure as Code:** Initialized the `terraform/` directory structure under version control.
+- **State Management:** Created the S3 state bucket (`ekscicd-terraform-state-bucket`) and configured the remote backend utilizing native state locking (`use_lockfile = true`) in `us-east-1`.
+- **Provider Configuration:** Pinned the HashiCorp AWS provider version `~> 5.0`.
+- **Visual Artifacts:** `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
