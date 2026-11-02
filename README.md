@@ -8,25 +8,37 @@ This repository contains a complete, production-grade automated CI/CD pipeline a
 - **Containerization & Registry:** Docker images tagged by Git commit SHA stored in Amazon ECR.
 - **Orchestration:** Deployed to Amazon EKS running across private subnets behind an AWS Application Load Balancer.
 
-## Current Status
-- [x] Day 1: VS Code, Git & GitHub setup and directory structure initialized.
-- [x] Day 2: Linux & AWS foundations (IAM, AWS CLI, CloudWatch billing alarms, SSH keys).
-- [x] Day 3: AWS networking & compute built by hand in the console.
-- [x] Day 4: NAT Gateways, private subnet route table configuration, and egress validation.
-- [x] Day 5: Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
-- [x] Day 6: Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, automated EKS cluster deployment, and GitHub synchronization.
-
 ---
 
 ## 📐 Architecture Overview
 
-The following diagram outlines the system architecture for the EKS CI/CD pipeline, detailing resources provisioned via Terraform (Day 6) and planned components for subsequent days:
+The following diagram outlines the system architecture for the EKS CI/CD pipeline, detailing resources provisioned via Terraform (Day 6) and subsequent pipeline components:
 
 ![Architecture Diagram](docs/screenshots/ekscicd-architecture.png)
 
 ---
 
-## 🏗️ Project Progress & Implementation Phases
+## 🚦 Roadmap & Implementation Status
+
+### Phase 1: Foundations & Manual Prototyping
+- [x] **Day 1:** VS Code, Git & GitHub setup and directory structure initialized.
+- [x] **Day 2:** Linux & AWS foundations (IAM, AWS CLI, CloudWatch billing alarms, SSH keys).
+- [x] **Day 3:** Custom VPC & Core Networking built manually via AWS Console.
+- [x] **Day 4:** NAT Gateways, private subnet route table configuration, and egress validation.
+- [x] **Day 5:** Manual EKS infrastructure setup, IAM roles, control plane, and managed node group deployment.
+
+### Phase 2: Infrastructure as Code, CI/CD & Orchestration
+- [x] **Day 6:** Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, automated EKS cluster deployment, and GitHub synchronization.
+- [x] **Day 7:** Ansible & Jenkins Server Setup, Infrastructure Redeployment, and Automated Provisioning.
+- [ ] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration.
+- [ ] **Day 9:** Containerization & Node.js Application Optimization.
+- [ ] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
+- [ ] **Day 11:** Full Pipeline Integration & SRE Practices.
+- [ ] **Day 12:** Documentation, Portfolio Polish & Cost Review.
+
+---
+
+## 🏗️ Detailed Project Progress & Implementation Highlights
 
 ### ✅ Day 3: Custom VPC & Core Networking Foundations
 - **Custom VPC Provisioning:** Deployed `ekscicd-vpc` (`10.0.0.0/16`) with DNS hostnames and DNS resolution enabled.
@@ -58,18 +70,38 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   - `docs/screenshots/ekscicd-day5-cluster-active.png` — EKS Control Plane active status.
   - `docs/screenshots/ekscicd-day5-nodes-ready.png` — Kubernetes managed worker nodes in `Ready` state.
 
----
+### ✅ Day 6: Terraform Infrastructure as Code
+- **Deliverables:** Codified network foundation, IAM roles, security groups, and EKS v1.37 architecture into Terraform modules. Established remote state storage backed by S3 with native state locking (`use_lockfile = true`). Cleared legacy "Day 5" manual infrastructure conflicts via AWS CLI teardown and achieved a clean-slate deployment (`Apply complete! Resources: 2 added, 0 changed, 0 destroyed.`). Synchronized all codebase and artifact updates to GitHub.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
+  - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
+  - `docs/screenshots/ekscicd-day6-terraform-plan-routes.png` — Terminal output verifying the complete network routes plan.
+  - `docs/screenshots/ekscicd-day6-terraform-plan-iam-sg.png` — Terminal output verifying the IAM and security group plan.
+  - `docs/screenshots/ekscicd-day6-terraform-plan-eks.png` — Terminal output verifying the complete EKS infrastructure plan.
+  - `docs/screenshots/ekscicd-day6-terraform-apply-success.png` — Terminal output verifying the successful clean-slate deployment.
+  - `docs/screenshots/ekscicd-day6-git-push.png` — Terminal output verifying successful git commit and push to remote GitHub repository.
 
-### Phase 2: Infrastructure as Code, CI/CD & Orchestration
-
-- [x] **Day 6: Terraform (Infrastructure as Code)**
-  - **Status:** Completed
-  - **Deliverable:** Codified network foundation, IAM roles, security groups, and EKS v1.37 architecture into Terraform modules. Established remote state storage backed by S3 with native state locking (`use_lockfile = true`). Cleared legacy "Day 5" manual infrastructure conflicts via AWS CLI teardown and achieved a clean-slate deployment (`Apply complete! Resources: 2 added, 0 changed, 0 destroyed.`). Synchronized all codebase and artifact updates to GitHub.
-  - **Visual Artifacts:** 
-    - `docs/screenshots/ekscicd-day6-terraform-init.png` — Terminal output verifying successful `terraform init`.
-    - `docs/screenshots/ekscicd-day6-terraform-plan-vpc.png` — Terminal output verifying the VPC Terraform plan.
-    - `docs/screenshots/ekscicd-day6-terraform-plan-routes.png` — Terminal output verifying the complete network routes plan.
-    - `docs/screenshots/ekscicd-day6-terraform-plan-iam-sg.png` — Terminal output verifying the IAM and security group plan.
-    - `docs/screenshots/ekscicd-day6-terraform-plan-eks.png` — Terminal output verifying the complete EKS infrastructure plan.
-    - `docs/screenshots/ekscicd-day6-terraform-apply-success.png` — Terminal output verifying the successful clean-slate deployment.
-    - `docs/screenshots/ekscicd-day6-git-push.png` — Terminal output verifying successful git commit and push to remote GitHub repository.
+### ✅ Day 7: Ansible & Jenkins Server Setup (Milestone 7.3)
+- **Overview:** Configured the Jenkins CI/CD controller server automated via Ansible to maintain an idempotent, reproducible configuration across deployment environments.
+- **Key Infrastructure & Stack Specifications:**
+  - **Host Environment:** AWS EC2 (`t3.medium`, Ubuntu 24.04 LTS) in `us-east-1` (`32.200.120.221`).
+  - **Runtime Requirement:** OpenJDK 21 (required by Jenkins LTS).
+  - **Automation Engine:** Ansible Playbook (`ansible/jenkins-setup.yml`) managed via inventory (`ansible/inventory.ini`).
+  - **Container Engine:** Docker CE (configured with the `jenkins` user added to the `docker` group).
+- **Execution & Verification:**
+  1. **Ansible Playbook Execution:**
+     ```bash
+     ansible-playbook -i ansible/inventory.ini ansible/jenkins-setup.yml
+     ```
+  2. **Service Status Verification:**
+     ```bash
+     sudo systemctl status jenkins --no-pager
+     sudo systemctl status docker --no-pager
+     ```
+  3. **Troubleshooting & Hardening Handled:**
+     - Updated repository configuration to pull the current Jenkins GPG key (`jenkins.io-2026.key`).
+     - Configured a Systemd service override (`/etc/systemd/system/jenkins.service.d/override.conf`) setting `JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64` to satisfy Java runtime requirements.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day7-terraform-apply.png`
+  - `docs/screenshots/ekscicd-day7-jenkins-instance.png`
+  - `docs/screenshots/ekscicd-day7-ansible-run.png`

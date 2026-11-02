@@ -1,0 +1,45 @@
+---
+- hosts: jenkins_servers
+  become: true
+  tasks:
+    - name: Ensure keyrings directory exists
+      file:
+        path: /usr/share/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download and add Jenkins GPG key
+      shell: |
+        curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key | tee \
+          /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+    - name: Add Jenkins apt repository
+      shell: |
+        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+          https://pkg.jenkins.io/debian-stable binary/ | tee \
+          /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+    - name: Update apt repo and install Java, Jenkins, and Docker
+      apt:
+        name:
+          - fontconfig
+          - openjdk-17-jre
+          - jenkins
+          - docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Jenkins & Docker services
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - jenkins
+        - docker
+
+    - name: Add jenkins user to docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
