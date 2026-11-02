@@ -30,7 +30,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 ### Phase 2: Infrastructure as Code, CI/CD & Orchestration
 - [x] **Day 6:** Terraform infrastructure as code, remote S3 state backend, clean-slate conflict teardown, automated EKS cluster deployment, and GitHub synchronization.
 - [x] **Day 7:** Ansible & Jenkins Server Setup, Infrastructure Redeployment, and Automated Provisioning.
-- [ ] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration.
+- [x] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration (In Progress — Steps 1 & 2 Complete).
 - [ ] **Day 9:** Containerization & Node.js Application Optimization.
 - [ ] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
 - [ ] **Day 11:** Full Pipeline Integration & SRE Practices.
@@ -105,3 +105,27 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   - `docs/screenshots/ekscicd-day7-terraform-apply.png`
   - `docs/screenshots/ekscicd-day7-jenkins-instance.png`
   - `docs/screenshots/ekscicd-day7-ansible-run.png`
+
+### ✅ Day 8, Step 1: Jenkins Web UI Unlock & Initial Access
+- **Access URL:** `http://32.200.120.221:8080`
+- **Administrative Unlock:** Retrieved initial administrator password from `/var/lib/jenkins/secrets/initialAdminPassword` and successfully unlocked the Jenkins control plane.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day8-jenkins-unlock.png` — Initial web UI unlock and password verification screen.
+
+### ✅ Day 8, Step 2: Core Pipeline & DevOps Plugin Installation
+- **Plugin Management:** Completed the initial setup wizard using the suggested plugins installation package, providing core pipeline, Git, and automation tools.
+- **Service Verification:** Verified successful initialization and dashboard access on the Jenkins control plane.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day8-plugins-installed.png` — Active Jenkins dashboard following successful plugin provisioning.
+
+  ### ✅ Day 8, Step 3: AWS & GitHub Secure Credential Configuration
+- **Credential Management:** Configured secure global credentials in Jenkins for AWS ECR/EKS access (`aws-secret-credentials`) and GitHub source code synchronization (`github-token`).
+- **Security Compliance:** Prevented plaintext credential exposure by leveraging Jenkins' built-in encrypted secrets store for pipeline authentication.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day8-credentials.png` — Global credentials manager dashboard verification screen.
+
+  ### ✅ Day 8, Step 4: Declarative Pipeline Skeleton (`Jenkinsfile`)
+- **Pipeline Structure:** Created the foundational `Jenkinsfile` defining multi-stage execution for source checkout, testing, container build/push to ECR, and EKS deployment.
+- **Version Control:** Committed and synchronized the pipeline configuration file to the remote GitHub repository.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day8-jenkinsfile.png` — Declarative pipeline definition script verification screen.
