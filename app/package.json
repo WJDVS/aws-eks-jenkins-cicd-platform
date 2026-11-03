@@ -1,0 +1,12 @@
+{
+  "name": "cloudpath-node-app",
+  "version": "1.0.0",
+  "description": "Node.js app for EKS CI/CD pipeline",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
