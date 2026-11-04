@@ -32,7 +32,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 - [x] **Day 7:** Ansible & Jenkins Server Setup, Infrastructure Redeployment, and Automated Provisioning.
 - [x] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration.
 - [x] **Day 9:** Containerization & Node.js Application Optimization.
-- [ ] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
+- [x] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
 - [ ] **Day 11:** Full Pipeline Integration & SRE Practices.
 - [ ] **Day 12:** Documentation, Portfolio Polish & Cost Review.
 
@@ -133,7 +133,11 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 - **Local Build & Runtime Verification:** Built and locally verified the container image using the multi-stage `Dockerfile`, running the container in detached mode mapped to host port `3000` (`docker run -d --name node-app-test -p 3000:3000 cloudpath-node-app:latest`). Verified HTTP responsiveness via `curl http://localhost:3000`, confirming successful initialization under non-root permissions before performing container cleanup.
   - **Artifact:** `docs/screenshots/ekscicd-day9-docker-build.png`
 
-- **Day 10, Step 2 (StorageClass, PVC, & Test Pod Validation):** Created the `ebs-gp3-sc` storage class and `app-pvc` (5Gi), then verified dynamic EBS volume provisioning by successfully mounting the storage to `app-pod`. Confirmed `Bound` PVC status and `Running` pod state.
+### ✅ Day 10: Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads
+- **EBS CSI Driver Integration:** Provisioned the Amazon EBS CSI driver add-on (`v1.67.2-eksbuild.1`) via Terraform, linking it to an IAM role (`ekscicd-ebs-csi-driver-role`) configured with `AmazonEBSCSIDriverPolicy` via IRSA (IAM Roles for Service Accounts) to resolve metadata and permission boundaries.
+- **Validation of CSI Controllers:** Verified that all EBS CSI controller (`6/6`) and node daemonset (`3/3`) pods initialized successfully and remained healthy in the `kube-system` namespace.
+  - **Artifact:** `docs/screenshots/ekscicd-day10-ebs-csi.png`
+- **Storage Configuration & Dynamic Provisioning Test:** Created a dynamic `gp3` Kubernetes `StorageClass` (`ebs-gp3-sc`) using the `ebs.csi.aws.com` provisioner with `volumeBindingMode: WaitForFirstConsumer`, alongside a 5Gi `PersistentVolumeClaim` (`app-pvc`) placed in the `k8s/` directory. Verified end-to-end dynamic volume binding and mount validation by deploying and testing a temporary application pod.
   - **Artifacts:** 
     - `docs/screenshots/ekscicd-day10-ebs-csi.png`
     - `docs/screenshots/ekscicd-day10-storage.png`
