@@ -132,3 +132,8 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   - **Artifact:** `docs/screenshots/ekscicd-day9-dockerfile.png`
 - **Local Build & Runtime Verification:** Built and locally verified the container image using the multi-stage `Dockerfile`, running the container in detached mode mapped to host port `3000` (`docker run -d --name node-app-test -p 3000:3000 cloudpath-node-app:latest`). Verified HTTP responsiveness via `curl http://localhost:3000`, confirming successful initialization under non-root permissions before performing container cleanup.
   - **Artifact:** `docs/screenshots/ekscicd-day9-docker-build.png`
+
+- **Day 10, Step 2 (StorageClass, PVC, & Test Pod Validation):** Created the `ebs-gp3-sc` storage class and `app-pvc` (5Gi), then verified dynamic EBS volume provisioning by successfully mounting the storage to `app-pod`. Confirmed `Bound` PVC status and `Running` pod state.
+  - **Artifacts:** 
+    - `docs/screenshots/ekscicd-day10-ebs-csi.png`
+    - `docs/screenshots/ekscicd-day10-storage.png`
