@@ -162,14 +162,14 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   # Day 12: Documentation, Portfolio Polish & Cost Review - CloudPath Capstone
 
 ## Objective
-Finalize the CloudPath capstone project by completing comprehensive portfolio documentation, conducting codebase hygiene reviews, executing a complete infrastructure teardown via Terraform, and shutting down all idle compute instances to eliminate ongoing AWS cloud costs.
+Finalize the aws-eks-jenkins-cicd-platform capstone project by completing comprehensive portfolio documentation, conducting codebase hygiene reviews, executing a complete infrastructure teardown via Terraform, and shutting down all idle compute instances to eliminate ongoing AWS cloud costs.
 
 ---
 
 ## 🛠️ Step-by-Step Implementation
 
 ### Step 1 & 2: Documentation Polish & Codebase Hygiene
-- **Portfolio Documentation:** Compiled a recruiter-ready overview outlining the complete architectural evolution from raw networking fundamentals to fully automated EKS deployments.
+- **Portfolio Documentation:** Compiled an overview outlining the complete architectural evolution from raw networking fundamentals to fully automated EKS deployments.
 - **Codebase Hygiene:** Conducted thorough validation of project assets, removing redundant temp files and verifying clean repository standards.
 - **Visual Artifacts:**
   - `docs/screenshots/ekscicd-day12-readme-review.png` — Rendered portfolio documentation review.
