@@ -15,15 +15,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    app = docker.build("${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}", "-f app/Dockerfile app/")
+                    sh "docker build -t ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -f app/Dockerfile app/"
                 }
             }
         }
         stage('Push to ECR') {
             steps {
-                script {
-                    awsEcrLogin(region: "${AWS_REGION}", credentialsId: "aws-secret-credentials")
-                    app.push()
+                withCredentials([aws(credentialsId: 'aws-secret-credentials', region: "${AWS_REGION}")]) {
+                    sh """
+                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                        docker push ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                    """
                 }
             }
         }
@@ -33,7 +35,7 @@ pipeline {
                     sh """
                         aws eks update-kubeconfig --region ${AWS_REGION} --name ekscicd-eks-cluster
                         kubectl apply -f k8s/storage.yaml
-                        kubectl sed 's|image:.*|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml | kubectl apply -f -
+                        sed 's|image:.*|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml | kubectl apply -f -
                     """
                 }
             }
