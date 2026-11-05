@@ -1,41 +1,50 @@
 pipeline {
     agent any
-
     environment {
-        AWS_DEFAULT_REGION = 'us-east-1'
-        ECR_REGISTRY = 'your-account-id.dkr.ecr.us-east-1.amazonaws.com'
+        AWS_REGION = 'us-east-1'
+        ECR_REGISTRY = '891612560987.ecr.us-east-1.amazonaws.com'
         IMAGE_NAME = 'cloudpath-node-app'
+        IMAGE_TAG = "${env.GIT_COMMIT ?: 'latest'}"
     }
-
     stages {
-        stage('Checkout Source') {
+        stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
-
-        stage('Build & Test') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building Node.js application and running verification tests...'
+                script {
+                    app = docker.build("${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}", "-f app/Dockerfile app/")
+                }
             }
         }
-
-        stage('Build & Push Docker Image') {
+        stage('Push to ECR') {
             steps {
-                echo 'Tagging container image with Git commit SHA and pushing to Amazon ECR...'
+                script {
+                    awsEcrLogin(region: "${AWS_REGION}", credentialsId: "aws-secret-credentials")
+                    app.push()
+                }
             }
         }
-
         stage('Deploy to EKS') {
             steps {
-                echo 'Deploying application manifests to Amazon EKS v1.37 cluster...'
+                withCredentials([aws(credentialsId: 'aws-secret-credentials', region: "${AWS_REGION}")]) {
+                    sh """
+                        aws eks update-kubeconfig --region ${AWS_REGION} --name ekscicd-eks-cluster
+                        kubectl apply -f k8s/storage.yaml
+                        kubectl sed 's|image:.*|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml | kubectl apply -f -
+                    """
+                }
             }
         }
     }
-
     post {
-        always {
-            cleanWs()
+        success {
+            echo 'Pipeline completed successfully! Workload deployed to EKS.'
+        }
+        failure {
+            echo 'Pipeline failed during execution. Check logs.'
         }
     }
 }
