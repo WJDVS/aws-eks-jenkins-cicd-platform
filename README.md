@@ -33,7 +33,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 - [x] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration.
 - [x] **Day 9:** Containerization & Node.js Application Optimization.
 - [x] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
-- [ ] **Day 11:** Full Pipeline Integration & SRE Practices.
+- [ ] **Day 11:** Full Pipeline Integration & SRE Practices (In Progress).
 - [ ] **Day 12:** Documentation, Portfolio Polish & Cost Review.
 
 ---
@@ -141,3 +141,11 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   - **Artifacts:** 
     - `docs/screenshots/ekscicd-day10-ebs-csi.png`
     - `docs/screenshots/ekscicd-day10-storage.png`
+
+### 🔄 Day 11: Full Pipeline Integration & SRE Practices (In Progress)
+- **Day 11, Step 1 (Jenkins Controller Tooling Setup):** Logged into the Jenkins EC2 controller and installed AWS CLI v2 and `kubectl` to enable interaction with the EKS cluster.
+  - **Artifact:** 
+    - `docs/screenshots/ekscicd-day11-tooling.png`[cite: 10]
+- **Day 11, Step 2 (EKS RBAC & aws-auth Delegation):** Configured Kubernetes RBAC and `aws-auth` ConfigMap mapping to grant the Jenkins instance authenticated administrative access to the EKS cluster.
+  - **Artifact:** 
+    - `docs/screenshots/ekscicd-day11-rbac-auth.png`
