@@ -159,7 +159,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
   kubectl get pvc
   kubectl get sc
 
-  # Day 12: Documentation, Portfolio Polish & Cost Review - CloudPath Capstone
+### ✅ Day 12: Documentation, Portfolio Polish & Cost Review - CloudPath Capstone
 
 ## Objective
 Finalize the aws-eks-jenkins-cicd-platform capstone project by completing comprehensive portfolio documentation, conducting codebase hygiene reviews, executing a complete infrastructure teardown via Terraform, and shutting down all idle compute instances to eliminate ongoing AWS cloud costs.
