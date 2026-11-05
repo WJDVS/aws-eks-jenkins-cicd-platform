@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: app-container
-      image: busybox:latest
+      image: DOCKER_IMAGE_PLACEHOLDER
       command:
         - sleep
         - "3600"
