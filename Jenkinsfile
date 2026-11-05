@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         AWS_REGION = 'us-east-1'
-        ECR_REGISTRY = '891612560987.ecr.us-east-1.amazonaws.com'
+        ECR_REGISTRY = '891612560987.dkr.ecr.us-east-1.amazonaws.com'
         IMAGE_NAME = 'cloudpath-node-app'
         IMAGE_TAG = "${env.GIT_COMMIT ?: 'latest'}"
     }
