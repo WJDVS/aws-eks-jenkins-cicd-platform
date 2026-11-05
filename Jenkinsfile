@@ -32,13 +32,31 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-secret-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh """
-                        aws eks update-kubeconfig --region ${AWS_REGION} --name ekscicd-eks-cluster
+                    sh '''
+                        # 1. Full image name built from the environment block (same image Build/Push used)
+                        IMAGE_URI="${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+
+                        # 2. Point kubectl at the EKS cluster
+                        aws eks update-kubeconfig --region "${AWS_REGION}" --name ekscicd-eks-cluster
+
+                        # 3. Storage first (StorageClass + PVC the pod depends on)
                         kubectl apply -f k8s/storage.yaml
-                        sed -i 's|image: DOCKER_IMAGE_PLACEHOLDER|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/test-pod.yaml
-                        tr -d '\\r' < k8s/test-pod.yaml > k8s/test-pod.yaml.tmp && mv k8s/test-pod.yaml.tmp k8s/test-pod.yaml
-                        kubectl apply -f k8s/test-pod.yaml
-                    """
+
+                        # 4. Render a copy: strip Windows line endings, then swap ONLY the placeholder
+                        tr -d '\\r' < k8s/test-pod.yaml |
+                            sed "s|DOCKER_IMAGE_PLACEHOLDER|${IMAGE_URI}|g" > k8s/test-pod.rendered.yaml
+
+                        # 5. Show the final YAML in the Jenkins log
+                        echo "----- rendered manifest -----"
+                        cat k8s/test-pod.rendered.yaml
+
+                        # 6. Validate without changing the cluster, then deploy
+                        kubectl apply --dry-run=client -f k8s/test-pod.rendered.yaml
+                        kubectl apply -f k8s/test-pod.rendered.yaml
+
+                        # 7. Confirm which image the pod is running
+                        kubectl get pod app-pod -o jsonpath='{.spec.containers[0].image}'; echo
+                    '''
                 }
             }
         }
