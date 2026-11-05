@@ -33,7 +33,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 - [x] **Day 8:** Jenkins CI/CD Pipeline & ECR Integration.
 - [x] **Day 9:** Containerization & Node.js Application Optimization.
 - [x] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
-- [ ] **Day 11:** Full Pipeline Integration & SRE Practices (In Progress).
+- [x] **Day 11:** Full Pipeline Integration & SRE Practices.
 - [ ] **Day 12:** Documentation, Portfolio Polish & Cost Review.
 
 ---
@@ -136,16 +136,34 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 ### ✅ Day 10: Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads
 - **EBS CSI Driver Integration:** Provisioned the Amazon EBS CSI driver add-on (`v1.67.2-eksbuild.1`) via Terraform, linking it to an IAM role (`ekscicd-ebs-csi-driver-role`) configured with `AmazonEBSCSIDriverPolicy` via IRSA (IAM Roles for Service Accounts) to resolve metadata and permission boundaries.
 - **Validation of CSI Controllers:** Verified that all EBS CSI controller (`6/6`) and node daemonset (`3/3`) pods initialized successfully and remained healthy in the `kube-system` namespace.
-  - **Artifact:** `docs/screenshots/ekscicd-day10-ebs-csi.png`
-- **Storage Configuration & Dynamic Provisioning Test:** Created a dynamic `gp3` Kubernetes `StorageClass` (`ebs-gp3-sc`) using the `ebs.csi.aws.com` provisioner with `volumeBindingMode: WaitForFirstConsumer`, alongside a 5Gi `PersistentVolumeClaim` (`app-pvc`) placed in the `k8s/` directory. Verified end-to-end dynamic volume binding and mount validation by deploying and testing a temporary application pod.
   - **Artifacts:** 
     - `docs/screenshots/ekscicd-day10-ebs-csi.png`
+- **Storage Configuration & Dynamic Provisioning Test:** Created a dynamic `gp3` Kubernetes `StorageClass` (`ebs-gp3-sc`) using the `ebs.csi.aws.com` provisioner with `volumeBindingMode: WaitForFirstConsumer`, alongside a 5Gi `PersistentVolumeClaim` (`app-pvc`) placed in the `k8s/` directory. Verified end-to-end dynamic volume binding and mount validation by deploying and testing a temporary application pod.
+  - **Artifacts:** 
     - `docs/screenshots/ekscicd-day10-storage.png`
 
-### 🔄 Day 11: Full Pipeline Integration & SRE Practices (In Progress)
-- **Day 11, Step 1 (Jenkins Controller Tooling Setup):** Logged into the Jenkins EC2 controller and installed AWS CLI v2 and `kubectl` to enable interaction with the EKS cluster.
-  - **Artifact:** 
-    - `docs/screenshots/ekscicd-day11-tooling.png`[cite: 10]
-- **Day 11, Step 2 (EKS RBAC & aws-auth Delegation):** Configured Kubernetes RBAC and `aws-auth` ConfigMap mapping to grant the Jenkins instance authenticated administrative access to the EKS cluster.
-  - **Artifact:** 
-    - `docs/screenshots/ekscicd-day11-rbac-auth.png`
+### ✅ Day 11: End-to-End EKS Deployment Pipeline Integration
+
+### Overview
+Automated the build, containerization, and Kubernetes deployment of the Node.js workload to Amazon EKS via a unified Jenkins CI/CD pipeline. Verified dynamic image tagging, cross-platform carriage-return stripping, and EBS GP3 persistent storage mounting.
+
+### Key Implementation Highlights
+- **Pipeline Dynamic Rendering**: Integrated placeholder substitution (`DOCKER_IMAGE_PLACEHOLDER`) within `k8s/test-pod.yaml` to dynamically point deployments to the latest commit-tagged image in Amazon ECR.
+- **Cross-Platform Compatibility**: Enforced line-ending normalization (`tr -d '\r'`) within the `Jenkinsfile` stage to prevent CRLF execution errors when processing Kubernetes manifests on Windows environments.
+- **Workload & Storage Verification**: Validated cluster state using `kubectl` to confirm successful deployment of application pods and binding of persistent volume claims via the `ebs-gp3-sc` storage class.
+
+### Verification Evidence
+- **Jenkins Controller Tooling**: `docs/screenshots/ekscicd-day11-tooling.png` (AWS CLI v2 and `kubectl` installed on Jenkins EC2)
+- **EKS RBAC Authorization**: `docs/screenshots/ekscicd-day11-rbac-auth.png` (`aws-auth` ConfigMap mapping configuration)
+- **Jenkins Pipeline Execution**: `docs/screenshots/ekscicd-day11-pipeline-success.png` (Build #20 verified SUCCESS)
+- **Cluster State Validation**: `docs/screenshots/ekscicd-day11-kubectl-verification.png` (Pods `Running`, PVC `Bound`)
+
+### Commands Executed
+```bash
+# Update local kubeconfig context
+aws eks update-kubeconfig --region us-east-1 --name ekscicd-eks-cluster
+
+# Verify runtime state
+kubectl get pods
+kubectl get pvc
+kubectl get sc
