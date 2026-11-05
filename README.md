@@ -34,7 +34,7 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 - [x] **Day 9:** Containerization & Node.js Application Optimization.
 - [x] **Day 10:** Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads.
 - [x] **Day 11:** Full Pipeline Integration & SRE Practices.
-- [ ] **Day 12:** Documentation, Portfolio Polish & Cost Review.
+- [x] **Day 12:** Documentation, Portfolio Polish & Cost Review.
 
 ---
 
@@ -136,51 +136,68 @@ The following diagram outlines the system architecture for the EKS CI/CD pipelin
 ### ✅ Day 10: Persistent Storage (AWS EBS CSI Driver) & Kubernetes Workloads
 - **EBS CSI Driver Integration:** Provisioned the Amazon EBS CSI driver add-on (`v1.67.2-eksbuild.1`) via Terraform, linking it to an IAM role (`ekscicd-ebs-csi-driver-role`) configured with `AmazonEBSCSIDriverPolicy` via IRSA (IAM Roles for Service Accounts) to resolve metadata and permission boundaries.
 - **Validation of CSI Controllers:** Verified that all EBS CSI controller (`6/6`) and node daemonset (`3/3`) pods initialized successfully and remained healthy in the `kube-system` namespace.
-  - **Artifacts:** 
-    - `docs/screenshots/ekscicd-day10-ebs-csi.png`
+  - **Artifact:** `docs/screenshots/ekscicd-day10-ebs-csi.png`
 - **Storage Configuration & Dynamic Provisioning Test:** Created a dynamic `gp3` Kubernetes `StorageClass` (`ebs-gp3-sc`) using the `ebs.csi.aws.com` provisioner with `volumeBindingMode: WaitForFirstConsumer`, alongside a 5Gi `PersistentVolumeClaim` (`app-pvc`) placed in the `k8s/` directory. Verified end-to-end dynamic volume binding and mount validation by deploying and testing a temporary application pod.
-  - **Artifacts:** 
-    - `docs/screenshots/ekscicd-day10-storage.png`
+  - **Artifact:** `docs/screenshots/ekscicd-day10-storage.png`
 
 ### ✅ Day 11: End-to-End EKS Deployment Pipeline Integration
+- **Pipeline Dynamic Rendering:** Integrated placeholder substitution (`DOCKER_IMAGE_PLACEHOLDER`) within `k8s/test-pod.yaml` to dynamically point deployments to the latest commit-tagged image in Amazon ECR.
+- **Cross-Platform Compatibility:** Enforced line-ending normalization (`tr -d '\r'`) within the `Jenkinsfile` stage to prevent CRLF execution errors when processing Kubernetes manifests on Windows environments.
+- **Workload & Storage Verification:** Validated cluster state using `kubectl` to confirm successful deployment of application pods and binding of persistent volume claims via the `ebs-gp3-sc` storage class.
+- **Verification Evidence:**
+  - **Jenkins Controller Tooling:** `docs/screenshots/ekscicd-day11-tooling.png` (AWS CLI v2 and `kubectl` installed on Jenkins EC2)
+  - **EKS RBAC Authorization:** `docs/screenshots/ekscicd-day11-rbac-auth.png` (`aws-auth` ConfigMap mapping configuration)
+  - **Jenkins Pipeline Execution:** `docs/screenshots/ekscicd-day11-pipeline-success.png` (Build #20 verified SUCCESS)
+  - **Cluster State Validation:** `docs/screenshots/ekscicd-day11-kubectl-verification.png` (Pods `Running`, PVC `Bound`)
+- **Commands Executed:**
+  ```bash
+  # Update local kubeconfig context
+  aws eks update-kubeconfig --region us-east-1 --name ekscicd-eks-cluster
 
-### Overview
-Automated the build, containerization, and Kubernetes deployment of the Node.js workload to Amazon EKS via a unified Jenkins CI/CD pipeline. Verified dynamic image tagging, cross-platform carriage-return stripping, and EBS GP3 persistent storage mounting.
+  # Verify runtime state
+  kubectl get pods
+  kubectl get pvc
+  kubectl get sc
 
-### Key Implementation Highlights
-- **Pipeline Dynamic Rendering**: Integrated placeholder substitution (`DOCKER_IMAGE_PLACEHOLDER`) within `k8s/test-pod.yaml` to dynamically point deployments to the latest commit-tagged image in Amazon ECR.
-- **Cross-Platform Compatibility**: Enforced line-ending normalization (`tr -d '\r'`) within the `Jenkinsfile` stage to prevent CRLF execution errors when processing Kubernetes manifests on Windows environments.
-- **Workload & Storage Verification**: Validated cluster state using `kubectl` to confirm successful deployment of application pods and binding of persistent volume claims via the `ebs-gp3-sc` storage class.
+  # Day 12: Documentation, Portfolio Polish & Cost Review - CloudPath Capstone
 
-### Verification Evidence
-- **Jenkins Controller Tooling**: `docs/screenshots/ekscicd-day11-tooling.png` (AWS CLI v2 and `kubectl` installed on Jenkins EC2)
-- **EKS RBAC Authorization**: `docs/screenshots/ekscicd-day11-rbac-auth.png` (`aws-auth` ConfigMap mapping configuration)
-- **Jenkins Pipeline Execution**: `docs/screenshots/ekscicd-day11-pipeline-success.png` (Build #20 verified SUCCESS)
-- **Cluster State Validation**: `docs/screenshots/ekscicd-day11-kubectl-verification.png` (Pods `Running`, PVC `Bound`)
-
-### Commands Executed
-```bash
-# Update local kubeconfig context
-aws eks update-kubeconfig --region us-east-1 --name ekscicd-eks-cluster
-
-# Verify runtime state
-kubectl get pods
-kubectl get pvc
-kubectl get sc
+## Objective
+Finalize the CloudPath capstone project by completing comprehensive portfolio documentation, conducting codebase hygiene reviews, executing a complete infrastructure teardown via Terraform, and shutting down all idle compute instances to eliminate ongoing AWS cloud costs.
 
 ---
 
-## 🏆 Capstone Conclusion & Technical Takeaways
-The **CloudPath** capstone project successfully demonstrates an end-to-end, production-grade DevOps engineering lifecycle. By combining Infrastructure as Code, immutable configuration management, automated container registries, and Kubernetes orchestration, this project showcases core competencies in cloud architecture, security compliance, and SRE automation principles.
----
+## 🛠️ Step-by-Step Implementation
 
-- **Jenkins Controller Shutdown:** Stopped the Jenkins EC2 controller instance (`i-0481ac307587f161f`) via AWS CLI to prevent idle compute billing.
-- **Visual Artifacts:** 
-  - `docs/screenshots/ekscicd-day12-jenkins-stopped.png` — AWS EC2 console / terminal verification of stopped Jenkins instance.
+### Step 1 & 2: Documentation Polish & Codebase Hygiene
+- **Portfolio Documentation:** Compiled a recruiter-ready overview outlining the complete architectural evolution from raw networking fundamentals to fully automated EKS deployments.
+- **Codebase Hygiene:** Conducted thorough validation of project assets, removing redundant temp files and verifying clean repository standards.
+- **Visual Artifacts:**
+  - `docs/screenshots/ekscicd-day12-readme-review.png` — Rendered portfolio documentation review.
+  - `docs/screenshots/ekscicd-day12-codebase-cleanup.png` — Clean git status tree confirmation.
 
-### 🔄 Cost Management & Teardown
-- **Jenkins Controller Shutdown:** Stopped all Jenkins EC2 controller instances via AWS CLI to prevent idle compute billing.
-- **Infrastructure Teardown:** Executed `terraform destroy` to securely purge all 33 cloud resources (EKS control plane, managed node groups, NAT gateways, and custom VPC networking), successfully eliminating recurring cloud costs.
-- **Visual Artifacts:** 
+### Step 3: Cost Management & Resource Teardown
+- **Jenkins Controller Shutdown:** Stopped all Jenkins EC2 controller instances (`i-0481ac307587f161f`, `i-0d73b5835598b8723`) via AWS CLI to prevent idle compute billing.
+- **Infrastructure Teardown:** Executed `terraform destroy` within the `terraform/` directory to securely purge all 33 cloud resources (EKS control plane, managed node groups, NAT gateways, and custom VPC networking), successfully eliminating recurring cloud costs.
+- **Visual Artifacts:**
   - `docs/screenshots/ekscicd-day12-jenkins-stopped.png` — AWS CLI confirmation of stopped Jenkins instance.
-  - `docs/screenshots/ekscicd-day12-terraform-destroy.png` — Terminal output verifying complete infrastructure teardown.
+  - `docs/screenshots/ekscicd-day12-terraform-destroy.png` — Terminal output verifying complete infrastructure teardown (`Destroy complete! Resources: 33 destroyed.`).
+
+## 🚀 Execution & Verification Commands
+```bash
+# Verify working tree and README modifications
+git status
+git diff README.md
+
+# Stop Jenkins EC2 controllers
+aws ec2 stop-instances --instance-ids i-0481ac307587f161f i-0d73b5835598b8723
+
+# Execute Terraform infrastructure teardown
+cd terraform/
+terraform init
+terraform destroy -auto-approve
+
+# Stage, commit, and push final documentation and artifacts
+cd ..
+git add README.md docs/screenshots/
+git commit -m "docs: finalize Day 12 portfolio documentation, hygiene, and complete infrastructure teardown"
+git push origin main
