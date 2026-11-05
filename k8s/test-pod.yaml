@@ -7,7 +7,9 @@ spec:
   containers:
     - name: app-container
       image: busybox:latest
-      command: ["sleep", "3600"]
+      command:
+        - sleep
+        - "3600"
       volumeMounts:
         - mountPath: "/data"
           name: persistent-storage
