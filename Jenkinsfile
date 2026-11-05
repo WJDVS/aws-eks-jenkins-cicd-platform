@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Push to ECR') {
             steps {
-                withCredentials([aws(credentialsId: 'aws-secret-credentials', region: "${AWS_REGION}")]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-secret-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh """
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                         docker push ${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy to EKS') {
             steps {
-                withCredentials([aws(credentialsId: 'aws-secret-credentials', region: "${AWS_REGION}")]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-secret-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh """
                         aws eks update-kubeconfig --region ${AWS_REGION} --name ekscicd-eks-cluster
                         kubectl apply -f k8s/storage.yaml
