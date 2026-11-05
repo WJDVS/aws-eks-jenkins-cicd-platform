@@ -167,3 +167,20 @@ aws eks update-kubeconfig --region us-east-1 --name ekscicd-eks-cluster
 kubectl get pods
 kubectl get pvc
 kubectl get sc
+
+---
+
+## 🏆 Capstone Conclusion & Technical Takeaways
+The **CloudPath** capstone project successfully demonstrates an end-to-end, production-grade DevOps engineering lifecycle. By combining Infrastructure as Code, immutable configuration management, automated container registries, and Kubernetes orchestration, this project showcases core competencies in cloud architecture, security compliance, and SRE automation principles.
+---
+
+- **Jenkins Controller Shutdown:** Stopped the Jenkins EC2 controller instance (`i-0481ac307587f161f`) via AWS CLI to prevent idle compute billing.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day12-jenkins-stopped.png` — AWS EC2 console / terminal verification of stopped Jenkins instance.
+
+### 🔄 Cost Management & Teardown
+- **Jenkins Controller Shutdown:** Stopped all Jenkins EC2 controller instances via AWS CLI to prevent idle compute billing.
+- **Infrastructure Teardown:** Executed `terraform destroy` to securely purge all 33 cloud resources (EKS control plane, managed node groups, NAT gateways, and custom VPC networking), successfully eliminating recurring cloud costs.
+- **Visual Artifacts:** 
+  - `docs/screenshots/ekscicd-day12-jenkins-stopped.png` — AWS CLI confirmation of stopped Jenkins instance.
+  - `docs/screenshots/ekscicd-day12-terraform-destroy.png` — Terminal output verifying complete infrastructure teardown.
