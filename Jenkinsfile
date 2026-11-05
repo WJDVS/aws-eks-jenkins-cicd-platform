@@ -35,7 +35,7 @@ pipeline {
                     sh """
                         aws eks update-kubeconfig --region ${AWS_REGION} --name ekscicd-eks-cluster
                         kubectl apply -f k8s/storage.yaml
-                        sed -i 's|image:.*|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml && kubectl apply -f k8s/deployment.yaml
+                        sed -i 's|image:.*|image:${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/test-pod.yaml && kubectl apply -f k8s/test-pod.yaml
                     """
                 }
             }
